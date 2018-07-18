@@ -9,16 +9,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -43,6 +48,9 @@ public class Ventana_Main extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("UIManager Exception : " + e);
         }
+        
+        
+        
         setLocationRelativeTo(null);    //La ventana aparece en el centro de la pantalla
         initComponents();
         TextPrompt placeholder = new TextPrompt("Texto a buscar...", searchTextField);  //Placeholder para la busqueda de texto
@@ -214,21 +222,28 @@ public class Ventana_Main extends javax.swing.JFrame {
         selector_carpeta.setVisible(true);
         if (selector_carpeta.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             nomCarp = selector_carpeta.getSelectedFile().toString();
-            lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
-            lblTick.setVisible(true);
+            
+            
             getFiles(selector_carpeta.getSelectedFile());
-            DefaultListModel listModel;
-            listModel = new DefaultListModel();
-            lstDocs.setModel(listModel);
-            for (int i = 0; i < ficheros.size(); i++) {
-                listModel.addElement(ficheros.get(i).toString());
+            if (ficheros.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "La carpeta seleccionada no contiene ficheros .docx", "Aviso", JOptionPane.WARNING_MESSAGE);
+                lblTick.setIcon(new ImageIcon("\\images\\cancel_icon.png"));
+                lblTick.setVisible(true);
+                repaint();
+                validate();
+            } else {
+                DefaultListModel listModel;
+                listModel = new DefaultListModel();
+                lstDocs.setModel(listModel);
+                for (int i = 0; i < ficheros.size(); i++) {
+                    listModel.addElement(ficheros.get(i).toString());
+                }
+                lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
+                lblTick.setVisible(true);
             }
-
+            
         } else {
-            lblTick.setIcon(new ImageIcon("\\images\\cancel_icon.png"));
-            lblTick.setVisible(true);
-            repaint();
-            validate();
+
         }
     }//GEN-LAST:event_btnSeleccionarCarpetaActionPerformed
 
@@ -249,33 +264,37 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-        DefaultListModel listModel;
-        listModel = new DefaultListModel();
-        String buscar = searchTextField.getText();
-        System.out.println("ENtor 1");
-        for (int i = 0; i < ficheros.size(); i++) {
-            for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
-                System.out.println("ENtor" + i);
-                if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
-                    System.out.println("ENtor IF");
-                    File doc = ficheros.get(i);
+        if (searchTextField.getText().length() < 1) {
+            JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            DefaultListModel listModel;
+            listModel = new DefaultListModel();
+            String buscar = searchTextField.getText();
+            System.out.println("ENtor 1");
+            for (int i = 0; i < ficheros.size(); i++) {
+                for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
+                    System.out.println("ENtor" + i);
+                    if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
+                        System.out.println("ENtor IF");
+                        File doc = ficheros.get(i);
 
-                    WordprocessingMLPackage wordMLPackage = null;
-                    try {
-                        wordMLPackage = WordprocessingMLPackage.load(doc);
-                    } catch (Docx4JException ex) {
-                        Logger.getLogger(Ventana_Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        WordprocessingMLPackage wordMLPackage = null;
+                        try {
+                            wordMLPackage = WordprocessingMLPackage.load(doc);
+                        } catch (Docx4JException ex) {
+                            Logger.getLogger(Ventana_Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
-                    MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
-                    List<Object> textNodes = mainDocumentPart.getContent();
-                    for (Object obj : textNodes) {
-                        String text = (String) obj.toString();
-                        if (text.contains(buscar)) {
+                        MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
+                        List<Object> textNodes = mainDocumentPart.getContent();
+                        for (Object obj : textNodes) {
+                            String text = (String) obj.toString();
+                            if (text.contains(buscar)) {
 
-                            lstResult.setModel(listModel);
-                            listModel.addElement(text);
-                            
+                                lstResult.setModel(listModel);
+                                listModel.addElement(text);
+
+                            }
                         }
                     }
                 }

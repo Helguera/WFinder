@@ -1,9 +1,13 @@
 package main;
 
 import Vista.Ventana_Main;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -16,6 +20,9 @@ public class main {
     public static void main(String args[]) throws Docx4JException, JAXBException, IOException {
         Ventana_Main ventana = new Ventana_Main();
         ventana.setVisible(true);
+        
+        
+        //JOptionPane.showMessageDialog(null, "My Goodness, this is so concise", "Warning", JOptionPane.WARNING_MESSAGE);
         
         /*File doc = new File("C:\\Users\\Sociograph\\Desktop\\prueba.docx");
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(doc);
