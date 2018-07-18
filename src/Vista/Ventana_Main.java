@@ -94,10 +94,10 @@ public class Ventana_Main extends javax.swing.JFrame {
         lblTick = new javax.swing.JLabel();
         pnlFich = new javax.swing.JScrollPane();
         lstDocs = new javax.swing.JList<>();
-        pnlResult = new javax.swing.JScrollPane();
-        txtResult = new javax.swing.JTextArea();
         lblResult = new javax.swing.JLabel();
         chkSeleccionador = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstResult = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -137,10 +137,6 @@ public class Ventana_Main extends javax.swing.JFrame {
         });
         pnlFich.setViewportView(lstDocs);
 
-        txtResult.setColumns(20);
-        txtResult.setRows(5);
-        pnlResult.setViewportView(txtResult);
-
         lblResult.setText("Resultado:");
 
         chkSeleccionador.setText("Seleccionar Todo");
@@ -149,6 +145,8 @@ public class Ventana_Main extends javax.swing.JFrame {
                 chkSeleccionadorActionPerformed(evt);
             }
         });
+
+        jScrollPane1.setViewportView(lstResult);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,19 +163,15 @@ public class Ventana_Main extends javax.swing.JFrame {
                         .addComponent(lblTick, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblResult)
-                                        .addComponent(pnlResult, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(pnlFich))
-                            .addComponent(chkSeleccionador))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pnlFich)
+                            .addComponent(chkSeleccionador)
+                            .addComponent(lblResult)
+                            .addComponent(jScrollPane1))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -197,11 +191,11 @@ public class Ventana_Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(lblResult)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlResult, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -255,10 +249,12 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
+        DefaultListModel listModel;
+        listModel = new DefaultListModel();
         String buscar = searchTextField.getText();
         System.out.println("ENtor 1");
-        for (int i = 0; i < lstDocs.getSelectedIndices().length ; i++) {
-            for (int j = 0; j < lstDocs.getSelectedIndices().length ; j++) {
+        for (int i = 0; i < ficheros.size(); i++) {
+            for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
                 System.out.println("ENtor" + i);
                 if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
                     System.out.println("ENtor IF");
@@ -276,7 +272,10 @@ public class Ventana_Main extends javax.swing.JFrame {
                     for (Object obj : textNodes) {
                         String text = (String) obj.toString();
                         if (text.contains(buscar)) {
-                            System.out.println(text);
+
+                            lstResult.setModel(listModel);
+                            listModel.addElement(text);
+                            
                         }
                     }
                 }
@@ -291,13 +290,13 @@ public class Ventana_Main extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnSeleccionarCarpeta;
     private javax.swing.JCheckBox chkSeleccionador;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblResult;
     private javax.swing.JLabel lblTick;
     private javax.swing.JList<String> lstDocs;
+    private javax.swing.JList<String> lstResult;
     private javax.swing.JScrollPane pnlFich;
-    private javax.swing.JScrollPane pnlResult;
     private javax.swing.JTextField searchTextField;
-    private javax.swing.JTextArea txtResult;
     // End of variables declaration//GEN-END:variables
 }
