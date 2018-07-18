@@ -12,11 +12,17 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 
 /**
  *
@@ -24,7 +30,8 @@ import javax.swing.UIManager;
  */
 public class Ventana_Main extends javax.swing.JFrame {
 
-    private ArrayList<File> ficheros = new ArrayList<File>();
+    private ArrayList<File> ficheros = new ArrayList<>();
+    private String nomCarp;
 
     /**
      * Creates new form Ventana_Main
@@ -47,15 +54,18 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     public void getFiles(File carpeta) {
         String[] filesindir = carpeta.list();
-        Arrays.sort(filesindir);
-        for (int i = 0; i < filesindir.length; i++) {
-            if (isDocx(filesindir[i])){
-                ficheros.add(new File(filesindir[i]));
+        if (filesindir.length > 0) {
+            Arrays.sort(filesindir);
+        }
+        for (String filesindir1 : filesindir) {
+            if (isDocx(filesindir1)) {
+                ficheros.add(new File(nomCarp + "\\" + filesindir1));
+                System.out.println(filesindir1);
             }
         }
 
     }
-    
+
     public static boolean isDocx(String file) {
         for (int i = file.length() - 1; i > -1; i--) {
 
@@ -102,6 +112,11 @@ public class Ventana_Main extends javax.swing.JFrame {
 
         btnBuscar.setText("Buscar");
         btnBuscar.setEnabled(false);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         lblFolder.setText("Carpeta: ");
 
@@ -115,6 +130,11 @@ public class Ventana_Main extends javax.swing.JFrame {
         lblTick.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTick.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Green-Tick.png"))); // NOI18N
 
+        lstDocs.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstDocsValueChanged(evt);
+            }
+        });
         pnlFich.setViewportView(lstDocs);
 
         txtResult.setColumns(20);
@@ -199,16 +219,16 @@ public class Ventana_Main extends javax.swing.JFrame {
         selector_carpeta.setAcceptAllFileFilterUsed(false);
         selector_carpeta.setVisible(true);
         if (selector_carpeta.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            nomCarp = selector_carpeta.getSelectedFile().toString();
             lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
             lblTick.setVisible(true);
             getFiles(selector_carpeta.getSelectedFile());
             DefaultListModel listModel;
             listModel = new DefaultListModel();
             lstDocs.setModel(listModel);
-            for (int i=0; i<ficheros.size(); i++){
+            for (int i = 0; i < ficheros.size(); i++) {
                 listModel.addElement(ficheros.get(i).toString());
             }
-            
 
         } else {
             lblTick.setIcon(new ImageIcon("\\images\\cancel_icon.png"));
@@ -224,8 +244,47 @@ public class Ventana_Main extends javax.swing.JFrame {
             lstDocs.setSelectionInterval(0, (lstDocs.getModel().getSize() - 1));
         } else {
             lstDocs.clearSelection();
+            btnBuscar.setEnabled(false);
         }
     }//GEN-LAST:event_chkSeleccionadorActionPerformed
+
+    private void lstDocsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDocsValueChanged
+        // TODO add your handling code here:
+        btnBuscar.setEnabled(true);
+    }//GEN-LAST:event_lstDocsValueChanged
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        String buscar = searchTextField.getText();
+        System.out.println("ENtor 1");
+        for (int i = 0; i < lstDocs.getSelectedIndices().length ; i++) {
+            for (int j = 0; j < lstDocs.getSelectedIndices().length ; j++) {
+                System.out.println("ENtor" + i);
+                if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
+                    System.out.println("ENtor IF");
+                    File doc = ficheros.get(i);
+
+                    WordprocessingMLPackage wordMLPackage = null;
+                    try {
+                        wordMLPackage = WordprocessingMLPackage.load(doc);
+                    } catch (Docx4JException ex) {
+                        Logger.getLogger(Ventana_Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
+                    List<Object> textNodes = mainDocumentPart.getContent();
+                    for (Object obj : textNodes) {
+                        String text = (String) obj.toString();
+                        if (text.contains(buscar)) {
+                            System.out.println(text);
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
