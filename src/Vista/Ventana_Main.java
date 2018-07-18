@@ -9,6 +9,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -19,6 +23,8 @@ import javax.swing.UIManager;
  * @author Sociograph
  */
 public class Ventana_Main extends javax.swing.JFrame {
+
+    private ArrayList<File> ficheros = new ArrayList<File>();
 
     /**
      * Creates new form Ventana_Main
@@ -37,6 +43,29 @@ public class Ventana_Main extends javax.swing.JFrame {
         placeholder.changeStyle(Font.ITALIC);
 
         lblTick.setVisible(false);
+    }
+
+    public void getFiles(File carpeta) {
+        String[] filesindir = carpeta.list();
+        Arrays.sort(filesindir);
+        for (int i = 0; i < filesindir.length; i++) {
+            if (isDocx(filesindir[i])){
+                ficheros.add(new File(filesindir[i]));
+            }
+        }
+
+    }
+    
+    public static boolean isDocx(String file) {
+        for (int i = file.length() - 1; i > -1; i--) {
+
+            if (file.charAt(i) == '.') {
+                if (file.substring(i + 1).equals("docx")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -172,7 +201,15 @@ public class Ventana_Main extends javax.swing.JFrame {
         if (selector_carpeta.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
             lblTick.setVisible(true);
-           
+            getFiles(selector_carpeta.getSelectedFile());
+            DefaultListModel listModel;
+            listModel = new DefaultListModel();
+            lstDocs.setModel(listModel);
+            for (int i=0; i<ficheros.size(); i++){
+                listModel.addElement(ficheros.get(i).toString());
+            }
+            
+
         } else {
             lblTick.setIcon(new ImageIcon("\\images\\cancel_icon.png"));
             lblTick.setVisible(true);
@@ -185,8 +222,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (chkSeleccionador.isSelected()) {
             lstDocs.setSelectionInterval(0, (lstDocs.getModel().getSize() - 1));
-        }
-        else{
+        } else {
             lstDocs.clearSelection();
         }
     }//GEN-LAST:event_chkSeleccionadorActionPerformed

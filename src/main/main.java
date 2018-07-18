@@ -21,14 +21,12 @@ public class main {
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(doc);
 
         MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
-        String textNodesXPath = "//w:t";
-        List<Object> textNodes = mainDocumentPart.getJAXBNodesViaXPath(textNodesXPath, true);
+        List<Object> textNodes = mainDocumentPart.getContent();
         for (Object obj : textNodes) {
-            Text text = (Text) ((JAXBElement) obj).getValue();
-            String textValue = text.getValue();
-            System.out.println(textValue);
-        }
-        */
+            String text = (String) obj.toString();
+            System.out.println(text);
+        }*/
+        
         
         /*String filename = "WINWORD.EXE";
         File baseDir = new File("C:/");
