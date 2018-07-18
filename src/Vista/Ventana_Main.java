@@ -48,9 +48,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("UIManager Exception : " + e);
         }
-        
-        
-        
+
         setLocationRelativeTo(null);    //La ventana aparece en el centro de la pantalla
         initComponents();
         TextPrompt placeholder = new TextPrompt("Texto a buscar...", searchTextField);  //Placeholder para la busqueda de texto
@@ -215,6 +213,9 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private void btnSeleccionarCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarCarpetaActionPerformed
         // TODO add your handling code here:
+        ficheros.clear();
+         if(lstDocs.getModel().getSize()>=1){lstDocs.clearSelection();}
+        lblFolder.setText("");
         JFileChooser selector_carpeta = new JFileChooser();
         selector_carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         selector_carpeta.setDialogTitle("Selecciona carpeta");
@@ -222,8 +223,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         selector_carpeta.setVisible(true);
         if (selector_carpeta.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             nomCarp = selector_carpeta.getSelectedFile().toString();
-            
-            
+
             getFiles(selector_carpeta.getSelectedFile());
             if (ficheros.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "La carpeta seleccionada no contiene ficheros .docx", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -241,7 +241,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                 lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
                 lblTick.setVisible(true);
             }
-            
+
         } else {
 
         }
@@ -264,6 +264,7 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
+        boolean entrada=false;
         if (searchTextField.getText().length() < 1) {
             JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
@@ -293,12 +294,13 @@ public class Ventana_Main extends javax.swing.JFrame {
 
                                 lstResult.setModel(listModel);
                                 listModel.addElement(text);
-
+                                entrada=true;
                             }
                         }
                     }
                 }
             }
+            if (!entrada){lstResult.removeAll();}
         }
 
 
