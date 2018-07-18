@@ -30,9 +30,13 @@ public class main {
         }
         */
         
-        
-        //Runtime runTime = Runtime.getRuntime();
-        //Process process = runTime.exec("winword C:\\Users\\Sociograph\\Desktop\\prueba.docx");
+        /*String filename = "WINWORD.EXE";
+        File baseDir = new File("C:/");
+        FindFile ff = new FindFile(filename, baseDir, 6);
+        long ini = System.currentTimeMillis();
+        File f = ff.find();
+        Runtime runTime = Runtime.getRuntime();
+        Process process = runTime.exec(f.toString());*/
 
     }
 
