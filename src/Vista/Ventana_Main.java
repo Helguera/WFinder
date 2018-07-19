@@ -214,7 +214,9 @@ public class Ventana_Main extends javax.swing.JFrame {
     private void btnSeleccionarCarpetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarCarpetaActionPerformed
         // TODO add your handling code here:
         ficheros.clear();
-         if(lstDocs.getModel().getSize()>=1){lstDocs.clearSelection();}
+        if (lstDocs.getModel().getSize() >= 1) {
+            lstDocs.clearSelection();
+        }
         lblFolder.setText("");
         JFileChooser selector_carpeta = new JFileChooser();
         selector_carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -264,12 +266,13 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-        boolean entrada=false;
+        boolean entrada = false;
         if (searchTextField.getText().length() < 1) {
             JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             DefaultListModel listModel;
             listModel = new DefaultListModel();
+            lstResult.setModel(listModel);
             String buscar = searchTextField.getText();
             System.out.println("ENtor 1");
             for (int i = 0; i < ficheros.size(); i++) {
@@ -292,15 +295,17 @@ public class Ventana_Main extends javax.swing.JFrame {
                             String text = (String) obj.toString();
                             if (text.contains(buscar)) {
 
-                                lstResult.setModel(listModel);
                                 listModel.addElement(text);
-                                entrada=true;
+                                entrada = true;
                             }
                         }
                     }
                 }
             }
-            if (!entrada){lstResult.removeAll();}
+            if (!entrada) {
+                listModel.removeAllElements();
+                 JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
         }
 
 
