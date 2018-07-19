@@ -107,9 +107,9 @@ public class Ventana_Main extends javax.swing.JFrame {
         chkSeleccionador = new javax.swing.JCheckBox();
         onTop = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
+        lblLoading = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstResult = new javax.swing.JList<>();
-        lblLoading = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -165,6 +165,10 @@ public class Ventana_Main extends javax.swing.JFrame {
 
         onTop.setText("jLabel1");
 
+        lblLoading.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLoading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/loading.gif"))); // NOI18N
+        lblLoading.setVerifyInputWhenFocusTarget(false);
+
         lstResult.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstResultMouseClicked(evt);
@@ -172,18 +176,14 @@ public class Ventana_Main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(lstResult);
 
-        lblLoading.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblLoading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/loading.gif"))); // NOI18N
-        lblLoading.setEnabled(false);
-
-        jLayeredPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(lblLoading, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
         jLayeredPane1Layout.setHorizontalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblLoading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblLoading, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
         );
@@ -317,52 +317,68 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         //TODO add your handling code here:
-        lblLoading.setVisible(true);
-        lblLoading.setEnabled(true);
-        boolean entrada = false;
-        if (searchTextField.getText().length() < 1) {
-            JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else {
-            DefaultListModel listModel;
-            listModel = new DefaultListModel();
-            lstResult.setModel(listModel);
-            String buscar = searchTextField.getText();
-          
-            for (int i = 0; i < ficheros.size(); i++) {             
-                for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
 
-                    if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
-                      
-                   
-                        File doc = ficheros.get(i);
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    boolean entrada = false;
+                    if (searchTextField.getText().length() < 1) {
+                        JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        btnBuscar.setEnabled(false);
+                        lblLoading.setVisible(true);
+                        lblLoading.setEnabled(true);
+                        DefaultListModel listModel;
+                        listModel = new DefaultListModel();
+                        lstResult.setModel(listModel);
+                        String buscar = searchTextField.getText();
 
-                        WordprocessingMLPackage wordMLPackage = null;
-                        try {
-                            wordMLPackage = WordprocessingMLPackage.load(doc);
-                        } catch (Docx4JException ex) {
-                            Logger.getLogger(Ventana_Main.class.getName()).log(Level.SEVERE, null, ex);
-                        }
- 
-                        MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
-                        List<Object> textNodes = mainDocumentPart.getContent();
-                        for (Object obj : textNodes) {
-                            String text = (String) obj.toString();
-                            if (text.contains(buscar)) {
-                                lblLoading.setVisible(false);
-                                lblLoading.setEnabled(false);
-                                listModel.addElement(text);
-                                entrada = true;
+                        for (int i = 0; i < ficheros.size(); i++) {
+                            for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
+
+                                if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
+
+                                    File doc = ficheros.get(i);
+
+                                    WordprocessingMLPackage wordMLPackage = null;
+                                    try {
+                                        wordMLPackage = WordprocessingMLPackage.load(doc);
+                                    } catch (Docx4JException ex) {
+                                        Logger.getLogger(Ventana_Main.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+
+                                    MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
+                                    List<Object> textNodes = mainDocumentPart.getContent();
+                                    for (Object obj : textNodes) {
+                                        String text = (String) obj.toString();
+                                        if (text.contains(buscar)) {
+                                            lblLoading.setVisible(false);
+                                            lblLoading.setEnabled(false);
+                                            btnBuscar.setEnabled(true);
+                                            listModel.addElement(text);
+                                            entrada = true;
+                                        }
+                                    }
+                                }
                             }
                         }
+                        if (!entrada) {
+                            lblLoading.setVisible(false);
+                            lblLoading.setEnabled(false);
+                            listModel.removeAllElements();
+                            JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
+                            btnBuscar.setEnabled(true);
+                        }
                     }
+                } catch (Exception e) {
+
                 }
             }
-            if (!entrada) {
-                listModel.removeAllElements();
-                JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
-            }
-        }
+        };
 
+        thread.start();
+        btnBuscar.setEnabled(true);
+        //thread.interrupt();
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
