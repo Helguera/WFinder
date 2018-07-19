@@ -9,7 +9,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class FindFile {
+public class FindWinWord {
 
     private static final File POISONPILL = new File("");
 
@@ -110,15 +110,16 @@ public class FindFile {
         }
     }
 
-    private final String filename;
-    private final File baseDir;
-    private final int concurrency;
+    private final String filename = "WINWORD.EXE";
+    private final File baseDir = new File("C:/");
+    private final int concurrency = 6;
     private final AtomicLong count;
+    
+    private String result;
+    
+   
 
-    public FindFile(final String filename, final File baseDir, final int concurrency) {
-        this.filename = filename;
-        this.baseDir = baseDir;
-        this.concurrency = concurrency;
+    public FindWinWord() {
         count = new AtomicLong(0);
     }
 
@@ -142,13 +143,13 @@ public class FindFile {
         }
     }
 
-    public static void main(final String[] args) {
+   /* public static void main(final String[] args) {
         final String filename = "WINWORD.EXE";
         final File baseDir = new File("C:/");
-        final FindFile ff = new FindFile(filename, baseDir, 6);
+        final FindFile ff = new FindFile();
         final long ini = System.currentTimeMillis();
         final File f = ff.find();
         final long end = System.currentTimeMillis();
         System.out.println(f + " " + (end - ini) + " ms");
-    }
+    }*/
 }
