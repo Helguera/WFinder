@@ -8,6 +8,7 @@ package Vista;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -39,6 +40,7 @@ public class Ventana_Main extends javax.swing.JFrame {
 
     private ArrayList<File> ficheros = new ArrayList<>();
     private String nomCarp;
+    private  Thread thread;
 
     /**
      * Creates new form Ventana_Main
@@ -96,6 +98,7 @@ public class Ventana_Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField1 = new javax.swing.JTextField();
         btnSeleccionarCarpeta = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         lblFolder = new javax.swing.JLabel();
@@ -111,6 +114,8 @@ public class Ventana_Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         lstResult = new javax.swing.JList<>();
 
+        jTextField1.setText("jTextField1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
@@ -122,8 +127,10 @@ public class Ventana_Main extends javax.swing.JFrame {
             }
         });
 
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Green-Tick.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.setEnabled(false);
+        btnBuscar.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/images/loading.gif"))); // NOI18N
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
@@ -217,8 +224,8 @@ public class Ventana_Main extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(pnlFich)
+                                .addComponent(btnBuscar))
+                            .addComponent(pnlFich, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                             .addComponent(chkSeleccionador)
                             .addComponent(lblResult)
                             .addComponent(jLayeredPane1))
@@ -244,7 +251,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar))
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(onTop)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -253,6 +260,8 @@ public class Ventana_Main extends javax.swing.JFrame {
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jLayeredPane1.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -318,14 +327,15 @@ public class Ventana_Main extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         //TODO add your handling code here:
 
-        Thread thread = new Thread() {
+        thread = new Thread() {
+            @Override
             public void run() {
                 try {
                     boolean entrada = false;
                     if (searchTextField.getText().length() < 1) {
                         JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        btnBuscar.setEnabled(false);
+                        btnBuscar.setSelected(true);
                         lblLoading.setVisible(true);
                         lblLoading.setEnabled(true);
                         DefaultListModel listModel;
@@ -365,13 +375,13 @@ public class Ventana_Main extends javax.swing.JFrame {
                         if (!entrada) {
                             lblLoading.setVisible(false);
                             lblLoading.setEnabled(false);
-                            listModel.removeAllElements();
-                            lstResult.revalidate();
+                           // listModel.removeAllElements();
+                            //lstResult.revalidate();
                             JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
                             btnBuscar.setEnabled(true);
                         }
                     }
-                } catch (Exception e) {
+                } catch (HeadlessException e) {
 
                 }
             }
@@ -405,6 +415,7 @@ public class Ventana_Main extends javax.swing.JFrame {
     private javax.swing.JCheckBox chkSeleccionador;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblLoading;
     private javax.swing.JLabel lblResult;
