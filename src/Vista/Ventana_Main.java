@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -66,7 +68,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         for (String filesindir1 : filesindir) {
             if (isDocx(filesindir1)) {
                 ficheros.add(new File(nomCarp + "\\" + filesindir1));
-                System.out.println(filesindir1);
+
             }
         }
 
@@ -104,6 +106,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         chkSeleccionador = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstResult = new javax.swing.JList<>();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -132,6 +135,11 @@ public class Ventana_Main extends javax.swing.JFrame {
                 searchTextFieldActionPerformed(evt);
             }
         });
+        searchTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                searchTextFieldKeyPressed(evt);
+            }
+        });
 
         lblTick.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTick.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Green-Tick.png"))); // NOI18N
@@ -152,6 +160,11 @@ public class Ventana_Main extends javax.swing.JFrame {
             }
         });
 
+        lstResult.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstResultMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(lstResult);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -177,7 +190,8 @@ public class Ventana_Main extends javax.swing.JFrame {
                             .addComponent(pnlFich)
                             .addComponent(chkSeleccionador)
                             .addComponent(lblResult)
-                            .addComponent(jScrollPane1))
+                            .addComponent(jScrollPane1)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -197,7 +211,9 @@ public class Ventana_Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblResult)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -238,6 +254,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                 listModel = new DefaultListModel();
                 lstDocs.setModel(listModel);
                 for (int i = 0; i < ficheros.size(); i++) {
+
                     listModel.addElement(ficheros.get(i).toString());
                 }
                 lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
@@ -265,7 +282,7 @@ public class Ventana_Main extends javax.swing.JFrame {
     }//GEN-LAST:event_lstDocsValueChanged
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        //TODO add your handling code here:
         boolean entrada = false;
         if (searchTextField.getText().length() < 1) {
             JOptionPane.showMessageDialog(null, "El campo de búsqueda no puede estar vacío", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -274,12 +291,13 @@ public class Ventana_Main extends javax.swing.JFrame {
             listModel = new DefaultListModel();
             lstResult.setModel(listModel);
             String buscar = searchTextField.getText();
-            System.out.println("ENtor 1");
-            for (int i = 0; i < ficheros.size(); i++) {
+          
+            for (int i = 0; i < ficheros.size(); i++) {             
                 for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
-                    System.out.println("ENtor" + i);
+
                     if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
-                        System.out.println("ENtor IF");
+                      
+                   
                         File doc = ficheros.get(i);
 
                         WordprocessingMLPackage wordMLPackage = null;
@@ -288,7 +306,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                         } catch (Docx4JException ex) {
                             Logger.getLogger(Ventana_Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
+ 
                         MainDocumentPart mainDocumentPart = wordMLPackage.getMainDocumentPart();
                         List<Object> textNodes = mainDocumentPart.getContent();
                         for (Object obj : textNodes) {
@@ -304,18 +322,34 @@ public class Ventana_Main extends javax.swing.JFrame {
             }
             if (!entrada) {
                 listModel.removeAllElements();
-                 JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         }
 
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void searchTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextFieldKeyPressed
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnBuscar.doClick();
+        }
+    }//GEN-LAST:event_searchTextFieldKeyPressed
+
+    private void lstResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstResultMouseClicked
+        JList list = (JList) evt.getSource();
+        if (evt.getClickCount() == 2) {
+            int index = list.locationToIndex(evt.getPoint());
+            System.out.println("index: " + index);
+        }
+    }//GEN-LAST:event_lstResultMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnSeleccionarCarpeta;
     private javax.swing.JCheckBox chkSeleccionador;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFolder;
     private javax.swing.JLabel lblResult;
