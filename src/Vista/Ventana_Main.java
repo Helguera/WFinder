@@ -366,6 +366,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                             lblLoading.setVisible(false);
                             lblLoading.setEnabled(false);
                             listModel.removeAllElements();
+                            lstResult.revalidate();
                             JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
                             btnBuscar.setEnabled(true);
                         }
