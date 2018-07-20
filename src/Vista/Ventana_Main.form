@@ -38,33 +38,31 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="btnSeleccionarCarpeta" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblFolder" min="-2" pref="439" max="-2" attributes="0"/>
+                      <Component id="chkSeleccionador" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="lblTick" min="-2" pref="32" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="searchTextField" min="-2" pref="462" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnSeleccionarCarpeta" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblFolder" min="-2" pref="439" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblTick" min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="pnlFich" alignment="0" pref="606" max="32767" attributes="0"/>
-                          <Component id="chkSeleccionador" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="searchTextField" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnBuscar" min="-2" pref="118" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="pnlFich" alignment="0" max="32767" attributes="0"/>
                           <Component id="lblResult" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLayeredPane1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
                   </Group>
               </Group>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="onTop" min="-2" pref="139" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="188" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -79,22 +77,22 @@
                       <Component id="lblFolder" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
-              <Component id="chkSeleccionador" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="chkSeleccionador" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Component id="pnlFich" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="searchTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBuscar" alignment="3" min="-2" pref="56" max="-2" attributes="0"/>
+                  <Component id="btnBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="onTop" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="lblResult" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLayeredPane1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -110,9 +108,6 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscar">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/images/Green-Tick.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Buscar"/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="selectedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -169,7 +164,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="lblResult">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Resultado:"/>
+        <Property name="text" type="java.lang.String" value="Resultados:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="chkSeleccionador">
@@ -179,14 +174,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkSeleccionadorActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="onTop">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel1"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
-      </AuxValues>
     </Component>
     <Container class="javax.swing.JLayeredPane" name="jLayeredPane1">
       <AccessibilityProperties>
@@ -205,12 +192,12 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="0" pref="24" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   <Component id="lblLoading" min="-2" pref="131" max="-2" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="25" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="130" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -251,5 +238,7 @@
         </Container>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
   </SubComponents>
 </Form>
