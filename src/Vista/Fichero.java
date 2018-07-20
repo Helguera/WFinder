@@ -52,5 +52,9 @@ public class Fichero {
 
     public String getRuta() {
         return ruta;
-    }   
+    }
+    
+    public String getNombreSinDocx(){
+        return nombre.substring(0,nombre.length()-5);
+    }
 }

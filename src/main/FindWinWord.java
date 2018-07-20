@@ -143,10 +143,10 @@ public class FindWinWord {
         }
     }
 
-   /* public static void main(final String[] args) {
+    /*public static void main(final String[] args) {
         final String filename = "WINWORD.EXE";
         final File baseDir = new File("C:/");
-        final FindFile ff = new FindFile();
+        final FindFile ff = new FindFile(filename);
         final long ini = System.currentTimeMillis();
         final File f = ff.find();
         final long end = System.currentTimeMillis();

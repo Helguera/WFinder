@@ -5,17 +5,25 @@
  */
 package Vista;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Sociograph
  */
 public class Ventana_Texto extends javax.swing.JFrame {
+    
+    private String ruta_word;
+    private String ruta_fichero;
 
     /**
      * Creates new form Ventana_Texto
      */
-    public Ventana_Texto() {
+    public Ventana_Texto(String ruta_word) {
         initComponents();
+        this.ruta_word=ruta_word;
     }
 
     /**
@@ -30,62 +38,57 @@ public class Ventana_Texto extends javax.swing.JFrame {
         btnAbrirDocx = new javax.swing.JButton();
         lblNombreDocx = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        textArea = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        btnAbrirDocx.setText("Abrir en Word");
+        btnAbrirDocx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirDocxActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAbrirDocx, java.awt.BorderLayout.PAGE_END);
 
         lblNombreDocx.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         getContentPane().add(lblNombreDocx, java.awt.BorderLayout.PAGE_START);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        textArea.setColumns(20);
+        textArea.setRows(5);
+        jScrollPane2.setViewportView(textArea);
 
         getContentPane().add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void btnAbrirDocxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirDocxActionPerformed
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Ventana_Texto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Ventana_Texto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Ventana_Texto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Ventana_Texto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            // TODO add your handling code here:
+            Runtime runTime = Runtime.getRuntime();
+            Process process = runTime.exec(ruta_word+"\\"+ruta_fichero);
+        } catch (IOException ex) {
+            Logger.getLogger(Ventana_Texto.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+    }//GEN-LAST:event_btnAbrirDocxActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Ventana_Texto().setVisible(true);
-            }
-        });
+
+    public void setTexto(String text) {
+        textArea.setText(text);
+    }
+    
+    public void setNombre(String name){
+        lblNombreDocx.setText(name);
+    }
+    
+    public void setButton(String ruta){
+        this.ruta_fichero=ruta;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrirDocx;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JLabel lblNombreDocx;
+    private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
 }

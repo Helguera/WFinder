@@ -28,6 +28,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import main.FindWinWord;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -38,10 +39,11 @@ import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
  */
 public class Ventana_Main extends javax.swing.JFrame {
 
-    private ArrayList<File> ficheros = new ArrayList<>();
+    private ArrayList<Fichero> ficheros = new ArrayList<>();
     private String nomCarp;
     private Thread thread;
     private int multiple = 0;
+    private String ruta_word;
 
     /**
      * Creates new form Ventana_Main
@@ -62,6 +64,10 @@ public class Ventana_Main extends javax.swing.JFrame {
 
         lblTick.setVisible(false);
         lblLoading.setVisible(false);
+
+        FindWinWord ff = new FindWinWord();
+        File f = ff.find();
+        ruta_word = f.toString();
     }
 
     public void getFiles(File carpeta) {
@@ -71,7 +77,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         }
         for (String filesindir1 : filesindir) {
             if (isDocx(filesindir1)) {
-                ficheros.add(new File(nomCarp + "\\" + filesindir1));
+                ficheros.add(new Fichero(filesindir1, nomCarp));
 
             }
         }
@@ -294,7 +300,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                 lstDocs.setModel(listModel);
                 for (int i = 0; i < ficheros.size(); i++) {
 
-                    listModel.addElement(ficheros.get(i).toString());
+                    listModel.addElement(ficheros.get(i).getNombre());
                 }
                 lblFolder.setText("Carpeta: " + selector_carpeta.getSelectedFile().toString());
                 lblTick.setVisible(true);
@@ -342,9 +348,9 @@ public class Ventana_Main extends javax.swing.JFrame {
                         for (int i = 0; i < ficheros.size(); i++) {
                             for (int j = 0; j < lstDocs.getSelectedIndices().length; j++) {
 
-                                if (ficheros.get(i).toString().equals(lstDocs.getSelectedValues()[j].toString())) {
+                                if (ficheros.get(i).getNombre().equals(lstDocs.getSelectedValues()[j].toString())) {
 
-                                    File doc = ficheros.get(i);
+                                    File doc = new File(ficheros.get(i).getRuta() + "\\" + ficheros.get(i).getNombre());
 
                                     WordprocessingMLPackage wordMLPackage = null;
                                     try {
@@ -361,7 +367,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                                             lblLoading.setVisible(false);
                                             lblLoading.setEnabled(false);
                                             btnBuscar.setEnabled(true);
-                                            listModel.addElement(text);
+                                            listModel.addElement(ficheros.get(i).getNombreSinDocx()+" -- "+text);
                                             entrada = true;
                                             multiple++;
                                         }
@@ -371,7 +377,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                         }
                         lblLoading.setVisible(false);
                         lblLoading.setEnabled(false);
-                        if (!entrada && multiple <1) {
+                        if (!entrada && multiple < 1) {
                             //listModel.removeAllElements();
                             //lstResult.revalidate();
                             JOptionPane.showMessageDialog(null, "No se han encontrado coincidencias", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -399,8 +405,10 @@ public class Ventana_Main extends javax.swing.JFrame {
     private void lstResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstResultMouseClicked
         JList list = (JList) evt.getSource();
         if (evt.getClickCount() == 2) {
-            int index = list.locationToIndex(evt.getPoint());
-            System.out.println("index: " + index);
+            Ventana_Texto ventana_texto = new Ventana_Texto(ruta_word);
+            ventana_texto.setVisible(true);
+            ventana_texto.setTexto(lstResult.getSelectedValue());
+            
         }
     }//GEN-LAST:event_lstResultMouseClicked
 
