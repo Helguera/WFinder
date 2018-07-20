@@ -354,7 +354,7 @@ public class Ventana_Main extends javax.swing.JFrame {
             lblTick.validate();
             listModel.removeAllElements();
             lstDocs.revalidate();
-            
+
         }
 
         lblFich.setText("(" + lstDocs.getModel().getSize() + ") Ficheros");
@@ -418,7 +418,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                                     List<Object> textNodes = mainDocumentPart.getContent();
                                     for (Object obj : textNodes) {
                                         String text = (String) obj.toString();
-                                        if (text.contains(buscar)) {
+                                        if (text.toLowerCase().contains(buscar.toLowerCase())) {
 
                                             btnBuscar.setEnabled(true);
                                             listModel.addElement(ficheros.get(i).getNombreSinDocx() + " -- " + text);
