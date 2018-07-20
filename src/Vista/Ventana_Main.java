@@ -65,10 +65,10 @@ public class Ventana_Main extends javax.swing.JFrame {
         lblTick.setVisible(false);
         lblLoading.setVisible(false);
 
-        FindWinWord ff = new FindWinWord();
+        /*FindWinWord ff = new FindWinWord();
         File f = ff.find();
         ruta_word = f.toString();
-        System.out.println(ruta_word);
+        System.out.println(ruta_word);*/
     }
 
     public void getFiles(File carpeta) {
@@ -466,7 +466,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             //System.out.println("RUTA DEL ARCHIVO A ABRIR: "+extractFileName(lstResult.getSelectedValue()));
             //System.out.println("Texto: "+extractText(lstResult.getSelectedValue()));
-            Ventana_Texto ventana_texto = new Ventana_Texto(ruta_word);
+            Ventana_Texto ventana_texto = new Ventana_Texto();
             ventana_texto.setVisible(true);
             ventana_texto.setTexto(extractText(lstResult.getSelectedValue()));
             ventana_texto.setButton(nomCarp + "\\" + extractFileName(lstResult.getSelectedValue()) + ".docx");

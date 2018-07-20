@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,16 +16,16 @@ import java.util.logging.Logger;
  * @author Sociograph
  */
 public class Ventana_Texto extends javax.swing.JFrame {
-    
+
     private String ruta_word;
     private String ruta_fichero;
 
     /**
      * Creates new form Ventana_Texto
      */
-    public Ventana_Texto(String ruta_word) {
+    public Ventana_Texto() {
         initComponents();
-        this.ruta_word=ruta_word;
+        this.ruta_word = ruta_word;
         textArea.setEditable(false);
     }
 
@@ -69,30 +71,36 @@ public class Ventana_Texto extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAbrirDocxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirDocxActionPerformed
-        try {
-            // TODO add your handling code here:
-            Runtime runTime = Runtime.getRuntime();
-            String[] cmd = new String[2];
-            cmd[0]=ruta_word;
-            cmd[1]=ruta_fichero;
-            System.out.println("RUTA: "+cmd[0]+" ---- TEXTO: "+cmd[1]);
-            Process process = runTime.exec(cmd);
-        } catch (IOException ex) {
-            Logger.getLogger(Ventana_Texto.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnAbrirDocxActionPerformed
 
+        // TODO add your handling code here:
+        /*Runtime runTime = Runtime.getRuntime();
+        String[] cmd = new String[2];
+        cmd[0] = '"' + ruta_word + '"';
+        cmd[1] = '"' + ruta_fichero + '"';*/
+
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(new File(ruta_fichero));
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        /*System.out.println("RUTA: "+cmd[0]+" ---- TEXTO: "+cmd[1]);
+            Process process = runTime.exec(cmd);*/
+
+    }//GEN-LAST:event_btnAbrirDocxActionPerformed
 
     public void setTexto(String text) {
         textArea.setText(text);
     }
-    
-    public void setNombre(String name){
+
+    public void setNombre(String name) {
         setTitle(name);
     }
-    
-    public void setButton(String ruta){
-        this.ruta_fichero=ruta;
+
+    public void setButton(String ruta) {
+        this.ruta_fichero = ruta;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
