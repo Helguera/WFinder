@@ -313,7 +313,11 @@ public class Ventana_Main extends javax.swing.JFrame {
         if (lstDocs.getModel().getSize() >= 1) {
             lstDocs.clearSelection();
         }
+        DefaultListModel listModel;
+        listModel = new DefaultListModel();
+        lstDocs.setModel(listModel);
         lblFolder.setText("");
+        chkSeleccionador.setSelected(false);
         JFileChooser selector_carpeta = new JFileChooser();
         selector_carpeta.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         selector_carpeta.setDialogTitle("Selecciona carpeta");
@@ -330,9 +334,11 @@ public class Ventana_Main extends javax.swing.JFrame {
                 lblTick.repaint();
                 lblTick.validate();
             } else {
-                DefaultListModel listModel;
-                listModel = new DefaultListModel();
-                lstDocs.setModel(listModel);
+                lblTick.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Green-Tick.png")));
+                lblTick.setVisible(true);
+                lblTick.repaint();
+                lblTick.validate();
+
                 for (int i = 0; i < ficheros.size(); i++) {
 
                     listModel.addElement(ficheros.get(i).getNombre());
@@ -342,12 +348,19 @@ public class Ventana_Main extends javax.swing.JFrame {
             }
 
         } else {
+            lblTick.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cancel_icon.png")));
+            lblTick.setVisible(true);
+            lblTick.repaint();
+            lblTick.validate();
+            listModel.removeAllElements();
+            lstDocs.revalidate();
             
         }
 
         lblFich.setText("(" + lstDocs.getModel().getSize() + ") Ficheros");
 
         lblFich.revalidate();
+
 
     }//GEN-LAST:event_btnSeleccionarCarpetaActionPerformed
 
@@ -406,7 +419,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                                     for (Object obj : textNodes) {
                                         String text = (String) obj.toString();
                                         if (text.contains(buscar)) {
-                                         
+
                                             btnBuscar.setEnabled(true);
                                             listModel.addElement(ficheros.get(i).getNombreSinDocx() + " -- " + text);
                                             entrada = true;
@@ -426,9 +439,10 @@ public class Ventana_Main extends javax.swing.JFrame {
 
                         lblRes.setText("(" + listModel.getSize() + ") Resultados");
                         lblRes.revalidate();
+                        lblLoading.setVisible(false);
+                        lblLoading.setEnabled(false);
                     }
-                    lblLoading.setVisible(false);
-                    lblLoading.setEnabled(false);
+
                 } catch (HeadlessException e) {
 
                 }
