@@ -29,6 +29,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import main.FindWinWord;
+import org.apache.commons.lang3.StringUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -98,12 +99,12 @@ public class Ventana_Main extends javax.swing.JFrame {
     }
 
     public String extractText(String text) {
-        int index = text.indexOf(" -- ");
-        return text.substring(index + 4);
+        int index = text.indexOf(" ➡ ");
+        return text.substring(index + 3);
     }
 
     public String extractFileName(String text) {
-        int index = text.indexOf(" -- ");
+        int index = text.indexOf(" ➡ ");
         return text.substring(0, index);
     }
 
@@ -418,10 +419,10 @@ public class Ventana_Main extends javax.swing.JFrame {
                                     List<Object> textNodes = mainDocumentPart.getContent();
                                     for (Object obj : textNodes) {
                                         String text = (String) obj.toString();
-                                        if (text.toLowerCase().contains(buscar.toLowerCase())) {
+                                        if (StringUtils.stripAccents(text.toLowerCase()).contains(StringUtils.stripAccents(buscar.toLowerCase()))) {
 
                                             btnBuscar.setEnabled(true);
-                                            listModel.addElement(ficheros.get(i).getNombreSinDocx() + " -- " + text);
+                                            listModel.addElement(ficheros.get(i).getNombreSinDocx() + " ➡ " + text);
                                             entrada = true;
                                             multiple++;
                                         }
