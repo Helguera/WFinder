@@ -24,6 +24,7 @@ public class Ventana_Texto extends javax.swing.JFrame {
     public Ventana_Texto(String ruta_word) {
         initComponents();
         this.ruta_word=ruta_word;
+        textArea.setEditable(false);
     }
 
     /**
@@ -41,6 +42,10 @@ public class Ventana_Texto extends javax.swing.JFrame {
         textArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(250, 250));
+        setPreferredSize(new java.awt.Dimension(700, 300));
+        setSize(new java.awt.Dimension(700, 300));
+        setType(java.awt.Window.Type.POPUP);
 
         btnAbrirDocx.setText("Abrir en Word");
         btnAbrirDocx.addActionListener(new java.awt.event.ActionListener() {
@@ -54,6 +59,7 @@ public class Ventana_Texto extends javax.swing.JFrame {
         getContentPane().add(lblNombreDocx, java.awt.BorderLayout.PAGE_START);
 
         textArea.setColumns(20);
+        textArea.setLineWrap(true);
         textArea.setRows(5);
         jScrollPane2.setViewportView(textArea);
 
@@ -66,7 +72,11 @@ public class Ventana_Texto extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             Runtime runTime = Runtime.getRuntime();
-            Process process = runTime.exec(ruta_word+"\\"+ruta_fichero);
+            String[] cmd = new String[2];
+            cmd[0]=ruta_word;
+            cmd[1]=ruta_fichero;
+            System.out.println("RUTA: "+cmd[0]+" ---- TEXTO: "+cmd[1]);
+            Process process = runTime.exec(cmd);
         } catch (IOException ex) {
             Logger.getLogger(Ventana_Texto.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -78,7 +88,7 @@ public class Ventana_Texto extends javax.swing.JFrame {
     }
     
     public void setNombre(String name){
-        lblNombreDocx.setText(name);
+        setTitle(name);
     }
     
     public void setButton(String ruta){

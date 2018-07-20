@@ -68,6 +68,7 @@ public class Ventana_Main extends javax.swing.JFrame {
         FindWinWord ff = new FindWinWord();
         File f = ff.find();
         ruta_word = f.toString();
+        System.out.println(ruta_word);
     }
 
     public void getFiles(File carpeta) {
@@ -94,6 +95,16 @@ public class Ventana_Main extends javax.swing.JFrame {
             }
         }
         return false;
+    }
+
+    public String extractText(String text) {
+        int index = text.indexOf(" -- ");
+        return text.substring(index+4);
+    }
+    
+    public String extractFileName(String text){
+        int index = text.indexOf(" -- ");
+        return text.substring(0, index);
     }
 
     /**
@@ -367,7 +378,7 @@ public class Ventana_Main extends javax.swing.JFrame {
                                             lblLoading.setVisible(false);
                                             lblLoading.setEnabled(false);
                                             btnBuscar.setEnabled(true);
-                                            listModel.addElement(ficheros.get(i).getNombreSinDocx()+" -- "+text);
+                                            listModel.addElement(ficheros.get(i).getNombreSinDocx() + " -- " + text);
                                             entrada = true;
                                             multiple++;
                                         }
@@ -405,10 +416,13 @@ public class Ventana_Main extends javax.swing.JFrame {
     private void lstResultMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstResultMouseClicked
         JList list = (JList) evt.getSource();
         if (evt.getClickCount() == 2) {
+            //System.out.println("RUTA DEL ARCHIVO A ABRIR: "+extractFileName(lstResult.getSelectedValue()));
+            //System.out.println("Texto: "+extractText(lstResult.getSelectedValue()));
             Ventana_Texto ventana_texto = new Ventana_Texto(ruta_word);
             ventana_texto.setVisible(true);
-            ventana_texto.setTexto(lstResult.getSelectedValue());
-            
+            ventana_texto.setTexto(extractText(lstResult.getSelectedValue()));
+            ventana_texto.setButton(nomCarp+"\\"+extractFileName(lstResult.getSelectedValue())+".docx");
+            ventana_texto.setNombre(extractFileName(lstResult.getSelectedValue())+".docx");
         }
     }//GEN-LAST:event_lstResultMouseClicked
 
